@@ -32,7 +32,7 @@ export default function DocumentationEntryPoint() {
     }, [router.query.package]);
 
   useEffect(() => {
-    router.push(`/docs/lazycanvas/${ver}/class/LazyCanvas`);
+    router.push(`/docs/lazycanvas/1.3.0-dev.kjlic0y2m15gvn50k796r/class/LazyCanvas`);
   }, []);
 
   return (

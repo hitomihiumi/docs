@@ -36,7 +36,7 @@ export function ClassRenderer({ entity }: { entity: DocumentedClass }) {
       {entity.methods.length ? (
         <div className="flex flex-col gap-4 mt-5">
           <Heading.H3>Methods</Heading.H3>
-          {entity.methods.map((method) => (
+          {entity.methods.filter((met) => !met.private).map((method) => (
             <Function key={`${entity.name}-${method.name}`} entity={method} />
           ))}
         </div>
