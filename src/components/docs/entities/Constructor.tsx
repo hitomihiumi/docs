@@ -1,6 +1,6 @@
 import { inter } from "@/lib/constants";
 import { CodeBlock, Paragraph } from "@edge-ui/react";
-import type { DocumentedClassConstructor } from "micro-docgen";
+import type { DocumentedClassConstructor } from "@hitomihiumi/micro-docgen";
 import { Example } from "./Example";
 import { ParameterTable } from "./ParameterTable";
 export function Constructor({ item }: { item: DocumentedClassConstructor }) {

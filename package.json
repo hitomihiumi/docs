@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@edge-ui/react": "0.0.11",
+    "@hitomihiumi/micro-docgen": "^0.2.1",
     "@next/mdx": "^13.4.7",
     "@radix-ui/react-collapsible": "^1.1.0",
     "@types/node": "20.3.1",

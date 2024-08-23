@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@edge-ui/react";
 import { CheckCircle, XCircle } from "lucide-react";
-import { DocumentedParameter } from "micro-docgen";
+import { DocumentedParameter } from "@hitomihiumi/micro-docgen";
 import { Type } from "./Type";
 
 export function ParameterTable({

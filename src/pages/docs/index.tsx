@@ -2,38 +2,27 @@ import { Container } from "@/components/layout/Container";
 import { Loader } from "@edge-ui/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-
-async function getLatestVersion(packageName: string): Promise<string | null> {
-    try {
-        const response = await fetch(`https://registry.npmjs.org/${packageName}/latest`);
-        if (!response.ok) {
-            throw new Error(`Failed to fetch latest version for package: ${packageName}`);
-        }
-        const data = await response.json();
-        return data.version;
-    } catch (error) {
-        console.error(error);
-        return null;
-    }
-}
+import { DocumentationStore } from "@/lib/store";
+const { libraries } = DocumentationStore;
 
 export default function DocumentationEntryPoint() {
   const router = useRouter();
 
-  var ver: string = "";
     useEffect(() => {
-        if (!router.query.package) return;
-        getLatestVersion(router.query.package as string).then((version) => {
-            console.log(version)
+       if (!router.query.package) return;
+         var pkg = libraries.find((lib) => lib.name === router.query.package as string);
 
-            if (!version) return;
-            ver = version;
-        });
+            if (!pkg) return;
+
+            const name = pkg.name;
+            const version = pkg.packageVersion;
+            const type = pkg.classes.length ? 'class' : pkg.types.length ? 'type' : pkg.functions.length ? 'function' : '';
+            const target = pkg.classes.length ? pkg.classes[0].data.name : pkg.types.length ? pkg.types[0].data.name : pkg.functions.length ? pkg.functions[0].data.name : '';
+
+            if (!target || !type) return;
+
+            router.push(`/docs/${encodeURIComponent(name)}/${encodeURIComponent(version)}/${encodeURIComponent(type)}/${encodeURIComponent(target)}`);
     }, [router.query.package]);
-
-  useEffect(() => {
-    router.push(`/docs/lazycanvas/1.3.0-dev.kjlic0y2m15gvn50k796r/class/LazyCanvas`);
-  }, []);
 
   return (
     <Container>

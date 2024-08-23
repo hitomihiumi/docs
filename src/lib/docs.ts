@@ -1,36 +1,91 @@
-import type { Documentation } from "micro-docgen";
+import type { Documentation } from "@hitomihiumi/micro-docgen";
 import Fuse from "fuse.js";
-import _docs from "../data/docs.json";
 
-export const docs = _docs as unknown as Documentation;
-
-for (const prop in docs.modules) {
-  docs.modules[prop as keyof typeof docs.modules].forEach((versions) =>
-      versions.classes.forEach(
-          // @ts-expect-error
-          (c) => (c.data.__type = "class")
-      ))
-  docs.modules[prop as keyof typeof docs.modules].forEach((versions) =>
-      versions.functions.forEach(
-          // @ts-expect-error
-          (c) => (c.data.__type = "function")
-      ))
-  docs.modules[prop as keyof typeof docs.modules].forEach((versions) =>
-      versions.types.forEach(
-          // @ts-expect-error
-          (c) => (c.data.__type = "type")
-      ));
-  docs.modules[prop as keyof typeof docs.modules].forEach((versions) =>
-      versions.variables.forEach(
-          // @ts-expect-error
-          (c) => (c.data.__type = "variable")
-      ));
-  docs.modules[prop as keyof typeof docs.modules].forEach((versions) =>
-      versions.enum.forEach(
-          // @ts-expect-error
-          (c) => (c.data.__type = "enum")
-      ));
+interface Docs {
+    modules: Array<Documentation>;
 }
+
+export var docs = { modules: [] } as Docs;
+
+// @ts-ignore
+async function fetchAndProcessDocs(docs: Docs): Promise<Docs>  {
+    const rawUrl = 'https://raw.githubusercontent.com/hitomihiumi/docsholder/master/packages/versions.json';
+
+    try {
+        const response = await fetch(rawUrl);
+
+        if (!response.ok) {
+            throw new Error(`Ошибка при загрузке файла: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+
+        var result = await processDocs(data, docs)
+
+        //console.log('Результат:', result);
+
+        return result;
+    } catch (error) {
+        console.error('Ошибка:', error);
+    }
+}
+
+async function processDocs(data: any, docs: Docs): Promise<Docs> {
+    //console.log('Обрабатываемые данные:', data.module);
+    data.modules.forEach((module: any) => {
+        //console.log('Обрабатываемый модуль:', module)
+        data.module[module].forEach(async (version: any) => {
+            const rawUrl = `https://raw.githubusercontent.com/hitomihiumi/docsholder/master/packages/${module}/${version}.json`;
+
+            try {
+                const response = await fetch(rawUrl);
+
+                if (!response.ok) {
+                    throw new Error(`Ошибка при загрузке файла: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                //console.log(data)
+                docs.modules.push(data);
+            } catch (error) {
+                console.error('Ошибка:', error);
+            }
+        });
+    });
+    //console.log('Обработанные данные:', data);
+    return docs;
+}
+
+fetchAndProcessDocs(docs).then((result) => {
+    docs = result;
+    //console.log('Обработанные данные:', result);
+});
+
+docs.modules.forEach((versions) =>
+    versions.classes.forEach(
+        // @ts-expect-error
+        (c) => (c.data.__type = "class")
+    ))
+docs.modules.forEach((versions) =>
+    versions.functions.forEach(
+        // @ts-expect-error
+        (c) => (c.data.__type = "function")
+    ))
+docs.modules.forEach((versions) =>
+    versions.types.forEach(
+        // @ts-expect-error
+        (c) => (c.data.__type = "type")
+    ));
+docs.modules.forEach((versions) =>
+    versions.variables.forEach(
+        // @ts-expect-error
+        (c) => (c.data.__type = "variable")
+    ));
+docs.modules.forEach((versions) =>
+    versions.enum.forEach(
+        // @ts-expect-error
+        (c) => (c.data.__type = "enum")
+    ));
 
 type Doc = {
   name: string;
@@ -123,51 +178,42 @@ export const docsLink = (() => {
   const mods = Object.values(docs.modules);
 
   for (const mod of mods) {
-    mod.forEach((versions) =>
-        versions.classes.forEach((c) =>
-            entries.push({
-                module: versions.name,
-                href: `/docs/${encodeURIComponent(versions.name)}/class/${c.data.name}`,
-                target: c.data.name,
-                type: "class",
-            })
-        ));
-    mod.forEach((versions) =>
-        versions.functions.forEach((c) =>
-            entries.push({
-                module: versions.name,
-                href: `/docs/${encodeURIComponent(versions.name)}/function/${c.data.name}`,
-                target: c.data.name,
-                type: "function",
-            })
-        ));
-    mod.forEach((versions) =>
-        versions.types.forEach((c) =>
-            entries.push({
-                module: versions.name,
-                href: `/docs/${encodeURIComponent(versions.name)}/type/${c.data.name}`,
-                target: c.data.name,
-                type: "type",
-            })
-        ));
-    mod.forEach((versions) =>
-        versions.variables.forEach((c) =>
-            entries.push({
-                module: versions.name,
-                href: `/docs/${encodeURIComponent(versions.name)}/variable/${c.data.name}`,
-                target: c.data.name,
-                type: "variable",
-            })
-        ));
-    mod.forEach((versions) =>
-        versions.enum.forEach((c) =>
-            entries.push({
-                module: versions.name,
-                href: `/docs/${encodeURIComponent(versions.name)}/enum/${c.data.name}`,
-                target: c.data.name,
-                type: "enum",
-            })
-        ));
+    mod.classes.forEach((c) =>
+        entries.push({
+            module: mod.name,
+            href: `/docs/${encodeURIComponent(mod.name)}/${encodeURIComponent(mod.packageVersion)}/class/${c.data.name}`,
+            target: c.data.name,
+            type: "class",
+        }));
+    mod.functions.forEach((c) =>
+        entries.push({
+            module: mod.name,
+            href: `/docs/${encodeURIComponent(mod.name)}/${encodeURIComponent(mod.packageVersion)}/function/${c.data.name}`,
+            target: c.data.name,
+            type: "function",
+        }));
+    mod.types.forEach((c) =>
+        entries.push({
+            module: mod.name,
+            href: `/docs/${encodeURIComponent(mod.name)}/${encodeURIComponent(mod.packageVersion)}/type/${c.data.name}`,
+            target: c.data.name,
+            type: "type",
+        }));
+    mod.variables.forEach((c) =>
+        entries.push({
+            module: mod.name,
+            href: `/docs/${encodeURIComponent(mod.name)}/${encodeURIComponent(mod.packageVersion)}/variable/${c.data.name}`,
+            target: c.data.name,
+            type: "variable",
+        }));
+    mod.enum.forEach((c) =>
+        entries.push({
+            module: mod.name,
+            href: `/docs/${encodeURIComponent(mod.name)}/${encodeURIComponent(mod.packageVersion)}/enum/${c.data.name}`,
+            target: c.data.name,
+            type: "enum",
+        })
+    );
   }
 
   return { internal: entries, external: EXTERNAL_LINKS };
@@ -177,88 +223,78 @@ const seed: Doc[] = (() => {
   const props: Doc[] = [];
 
   for (const mod of Object.values(docs.modules)) {
-    mod.forEach((versions) =>
-        versions.classes.forEach((cls) => {
+    mod.classes.forEach((cls) => {
+        props.push({
+            module: mod.name,
+            href: `/docs/${encodeURIComponent(mod.name)}/${encodeURIComponent(mod.packageVersion)}/class/${cls.data.name}`,
+            name: cls.data.name,
+            type: "class",
+            displayName: cls.data.name,
+        });
+
+        cls.data.methods.forEach((method) => {
             props.push({
-                module: versions.name,
-                href: `/docs/${encodeURIComponent(versions.name)}/class/${cls.data.name}`,
-                name: cls.data.name,
-                type: "class",
-                displayName: cls.data.name,
-            });
-
-            cls.data.methods.forEach((method) => {
-                props.push({
-                    href: `/docs/${encodeURIComponent(versions.name)}/class/${
-                        cls.data.name
-                    }?scrollTo=fm-${method.name}`,
-                    module: versions.name,
-                    name: method.name,
-                    type: "function",
-                    displayName: `${cls.data.name}.${method.name}()`,
-                });
-            });
-
-            cls.data.properties.forEach((prop) => {
-                props.push({
-                    href: `/docs/${encodeURIComponent(versions.name)}/class/${
-                        cls.data.name
-                    }?scrollTo=p-${prop.name}`,
-                    module: versions.name,
-                    name: prop.name,
-                    type: "property",
-                    displayName: `${cls.data.name}.${prop.name}`,
-                });
-            });
-        })
-    )
-
-    mod.forEach((versions) =>
-        versions.types.forEach((cls) =>
-            props.push({
-                module: versions.name,
-                href: `/docs/${encodeURIComponent(versions.name)}/type/${cls.data.name}`,
-                name: cls.data.name,
-                type: "type",
-                displayName: cls.data.name,
-            })
-        )
-    );
-
-    mod.forEach((versions) =>
-        versions.functions.forEach((cls) =>
-            props.push({
-                module: versions.name,
-                href: `/docs/${encodeURIComponent(versions.name)}/function/${cls.data.name}`,
-                name: cls.data.name,
+                href: `/docs/${encodeURIComponent(mod.name)}/${encodeURIComponent(mod.packageVersion)}/class/${
+                    cls.data.name
+                }?scrollTo=fm-${method.name}`,
+                module: mod.name,
+                name: method.name,
                 type: "function",
-                displayName: cls.data.name,
-            })
-        )
+                displayName: `${cls.data.name}.${method.name}()`,
+            });
+        });
+
+        cls.data.properties.forEach((prop) => {
+            props.push({
+                href: `/docs/${encodeURIComponent(mod.name)}/${encodeURIComponent(mod.packageVersion)}/class/${
+                    cls.data.name
+                }?scrollTo=p-${prop.name}`,
+                module: mod.name,
+                name: prop.name,
+                type: "property",
+                displayName: `${cls.data.name}.${prop.name}`,
+            });
+        });
+    });
+
+    mod.types.forEach((cls) =>
+        props.push({
+            module: mod.name,
+            href: `/docs/${encodeURIComponent(mod.name)}/${encodeURIComponent(mod.packageVersion)}/type/${cls.data.name}`,
+            name: cls.data.name,
+            type: "type",
+            displayName: cls.data.name,
+        })
     );
 
-    mod.forEach((versions) =>
-        versions.variables.forEach((cls) =>
-            props.push({
-                module: versions.name,
-                href: `/docs/${encodeURIComponent(versions.name)}/variable/${cls.data.name}`,
-                name: cls.data.name,
-                type: "variable",
-                displayName: cls.data.name,
-            })
-        )
+    mod.functions.forEach((cls) =>
+        props.push({
+            module: mod.name,
+            href: `/docs/${encodeURIComponent(mod.name)}/${encodeURIComponent(mod.packageVersion)}/function/${cls.data.name}`,
+            name: cls.data.name,
+            type: "function",
+            displayName: cls.data.name,
+        })
     );
 
-    mod.forEach((versions) =>
-        versions.enum.forEach((cls) =>
-            props.push({
-                module: versions.name,
-                href: `/docs/${encodeURIComponent(versions.name)}/enum/${cls.data.name}`,
-                name: cls.data.name,
-                type: "enum",
-                displayName: cls.data.name,
-            })
-        )
+    mod.variables.forEach((cls) =>
+        props.push({
+            module: mod.name,
+            href: `/docs/${encodeURIComponent(mod.name)}/${encodeURIComponent(mod.packageVersion)}/variable/${cls.data.name}`,
+            name: cls.data.name,
+            type: "variable",
+            displayName: cls.data.name,
+        })
+    );
+
+    mod.enum.forEach((cls) =>
+        props.push({
+            module: mod.name,
+            href: `/docs/${encodeURIComponent(mod.name)}/${encodeURIComponent(mod.packageVersion)}/enum/${cls.data.name}`,
+            name: cls.data.name,
+            type: "enum",
+            displayName: cls.data.name,
+        })
     );
   }
 

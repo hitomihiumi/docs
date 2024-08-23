@@ -1,7 +1,7 @@
 import { inter } from "@/lib/constants";
 import { makeTypeParams } from "@/lib/util";
 import { Badge, Paragraph } from "@edge-ui/react";
-import type { DocumentedClassProperty } from "micro-docgen";
+import type { DocumentedClassProperty } from "@hitomihiumi/micro-docgen";
 import { EntitySymbol } from "./EntitySymbol";
 import { Type } from "./Type";
 

@@ -1,6 +1,6 @@
 import { inter } from "@/lib/constants";
 import { Heading, Paragraph } from "@edge-ui/react";
-import type { DocumentedTypes } from "micro-docgen";
+import type { DocumentedTypes } from "@hitomihiumi/micro-docgen";
 import { EntitySymbol } from "../entities/EntitySymbol";
 import { ParameterTable } from "../entities/ParameterTable";
 import { Properties } from "../entities/Properties";

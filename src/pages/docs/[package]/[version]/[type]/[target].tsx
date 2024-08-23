@@ -20,34 +20,45 @@ import {
   VscSymbolVariable,
 } from "react-icons/vsc";
 import { DocumentationStore } from "@/lib/store";
+import {docs} from "@/lib/docs";
 
+function filterDuplicates<T>(array: T[]): T[] {
+    return array.filter((item, index, self) =>
+        index === self.findIndex((t) => JSON.stringify(t) === JSON.stringify(item))
+    );
+}
 
 export default function DocsPage() {
   const router = useRouter();
   const { package: pkg, version, type, target } = router.query;
-  const { libNames, libraries, libVersions } = DocumentationStore;
-  const [currentLib, setCurrentLib] = useState<(typeof libraries[0][0])>();
+  const {  libraries,  } = DocumentationStore;
+  const [currentLib, setCurrentLib] = useState<(typeof libraries)[0]>();
 
+   const libNames = filterDuplicates(libraries.map((library) => library.name))
+    const libVersions = libraries.map((library) => ({ version: library.packageVersion, name: library.name }));
+
+   console.log('Список имён', libNames)
+    console.log('Список библеотек', libraries)
+    console.log('Список версий', libVersions)
   useEffect(() => {
     if (!pkg || !type || !target || !version) return;
 
-    console.log((typeof libraries[0][0]))
-      console.log(version)
-      console.log(libNames)
+    //console.log((typeof libraries)[0])
+      //console.log('версия', version)
+      //console.log('Список имён', libNames)
+        //console.log('Список библеотек', libraries)
+        //console.log('Список версий', libVersions)
 
     if (pkg === currentLib?.name && version === currentLib?.packageVersion) return;
 
     var lib;
       libraries.forEach((library) => {
-          console.log(library)
-          library.forEach((v) => {
-              if (v.name === router.query.package && v.packageVersion === router.query.version) {
-                  lib = v;
-              }
-          })
+          //console.log('библеотека', library)
+          if (library.name === router.query.package && library.packageVersion === router.query.version) {
+              lib = library;
+          }
       })
-    console.log(lib)
-      console.log(libVersions)
+    //console.log(lib)
     if (!lib) return;
 
     setCurrentLib(lib);
@@ -68,11 +79,9 @@ export default function DocsPage() {
       onSelect={(val) => {
          var lib;
           libraries.forEach((library) => {
-                library.forEach((v) => {
-                    if (v.name === val) {
-                        lib = v;
-                    }
-                })
+              if (library.name === val) {
+                  lib = library;
+              }
         });
         if (!lib) return;
         const navigationConfig = {
@@ -108,11 +117,9 @@ export default function DocsPage() {
           onSelect={(val) => {
               var lib;
               libraries.forEach((library) => {
-                  library.forEach((v) => {
-                      if (v.packageVersion === val) {
-                          lib = v;
-                      }
-                  })
+                  if (library.packageVersion === val) {
+                      lib = library;
+                  }
               });
             if (!lib) return;
             const navigationConfig = {

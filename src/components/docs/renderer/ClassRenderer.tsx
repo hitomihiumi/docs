@@ -1,5 +1,5 @@
 import { Badge, Heading } from "@edge-ui/react";
-import type { DocumentedClass } from "micro-docgen";
+import type { DocumentedClass } from "@hitomihiumi/micro-docgen";
 import { Constructor } from "../entities/Constructor";
 import { EntitySymbol } from "../entities/EntitySymbol";
 import { Function } from "../entities/Function";

@@ -1,6 +1,6 @@
 import { inter } from "@/lib/constants";
 import { Badge, Paragraph } from "@edge-ui/react";
-import { DocumentedClassMethod, DocumentedFunction } from "micro-docgen";
+import { DocumentedClassMethod, DocumentedFunction } from "@hitomihiumi/micro-docgen";
 import { EntitySymbol } from "./EntitySymbol";
 import { Example } from "./Example";
 import { ParameterTable } from "./ParameterTable";

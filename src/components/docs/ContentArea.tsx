@@ -6,21 +6,26 @@ import type {
   DocumentedClass,
   DocumentedFunction,
   DocumentedTypes,
-} from "micro-docgen";
+} from "@hitomihiumi/micro-docgen";
 import { HeadingMeta } from "../heading";
 import { Function } from "./entities/Function";
 import { ClassRenderer } from "./renderer/ClassRenderer";
 import { TypeRenderer } from "./renderer/TypeRenderer";
 
 interface IProps {
-  data: Documentation["modules"][string];
+  data: Documentation;
+}
+
+interface IContentAreaProps {
+    data: DocumentedClass | DocumentedTypes | DocumentedFunction | null;
+    type: string | string[] | undefined;
 }
 
 export function ContentArea({ data }: IProps) {
   const router = useRouter();
-  const { package: packageName, type, target, scrollTo } = router.query;
+  const { package: packageName, version: packageVersion, type, target, scrollTo } = router.query;
   const [currentItem, setCurrentItem] = useState<
-    DocumentedClass | DocumentedTypes | DocumentedFunction | null
+      IContentAreaProps | null
   >(() => {
     const t =
       type === "class"
@@ -32,10 +37,16 @@ export function ContentArea({ data }: IProps) {
         : type === "enum"
         ? "enum"
         : "types";
+    console.log('t', t)
     const res = data[t as Exclude<keyof typeof data, "name">] as unknown as {
       data: DocumentedClass | DocumentedTypes | DocumentedFunction;
     }[];
-    const entity = res.find((e) => e.data.name === target)?.data || null;
+    console.log('res', res)
+    const entity: IContentAreaProps = {} as IContentAreaProps;
+    entity.data = res.find((e) => e.data.name === target)?.data || null;
+    entity.type = type;
+
+    console.log('entity', entity)
 
     return entity;
   });
@@ -78,7 +89,8 @@ export function ContentArea({ data }: IProps) {
         if (!type) {
           const dest = `/docs/${encodeURIComponent(
             packageName as string
-          )}?type=${resolvedType}&target=${
+          )}/${encodeURIComponent(packageVersion as string)}?type=${resolvedType}&target=${
+            // @ts-ignore
             data[t as Exclude<keyof typeof data, "name">][0].data.name
           }${
             router.query.scrollTo ? `&scrollTo=${router.query.scrollTo}` : ""
@@ -97,34 +109,42 @@ export function ContentArea({ data }: IProps) {
           : type === "enum"
           ? "enum"
           : "types";
+      //console.log(t)
+      //console.log(data[t as Exclude<keyof typeof data, "name">])
+      //console.log(data)
       const res = data[t as Exclude<keyof typeof data, "name">] as unknown as {
         data: DocumentedClass | DocumentedTypes | DocumentedFunction;
       }[];
 
-      const entity = res?.find((e) => e.data.name === target)?.data || null;
+      const entity: IContentAreaProps = {} as IContentAreaProps;
+      entity.data = res?.find((e) => e.data.name === target)?.data || null;
+      entity.type = type;
+
       setCurrentItem(entity);
     }
-  }, [target, type, packageName, data]);
+  }, [target, type, packageName, packageVersion, data]);
 
-  // @ts-expect-error
-  if (!currentItem || currentItem.__type !== type) return <></>;
+  //console.log(currentItem)
+
+
+  if (!currentItem || currentItem.type !== type || currentItem.data?.name !== target) return <></>;
 
   return (
     <>
       <HeadingMeta
-        title={`${currentItem.name}`}
-        description={`Documentation for ${currentItem.name}.`}
+        title={`${currentItem.data?.name}`}
+        description={`Documentation for ${currentItem.data?.name}.`}
       />
       <div className="mb-16">
         {["enum", "type", "variable"].includes(type as string) ? (
           <TypeRenderer
-            entity={currentItem as DocumentedTypes}
+            entity={currentItem.data as DocumentedTypes}
             type={type as any}
           />
         ) : type === "class" ? (
-          <ClassRenderer entity={currentItem as DocumentedClass} />
+          <ClassRenderer entity={currentItem.data as DocumentedClass} />
         ) : type === "function" ? (
-          <Function entity={currentItem as DocumentedFunction} />
+          <Function entity={currentItem.data as DocumentedFunction} />
         ) : null}
       </div>
     </>

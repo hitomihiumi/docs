@@ -10,15 +10,10 @@ export default function DocumentationEntryPoint() {
 
     useEffect(() => {
         if (!router.query.package) return;
-        console.log(libraries)
-        var pkg
-        libraries.forEach((lib) => {
-            lib.forEach((v) => {
-                if (v.name === router.query.package && v.packageVersion === router.query.version) {
-                    pkg = v;
-                }
-            })
-        })
+        //console.log(libraries)
+        var pkg = libraries.find((lib) => lib.name === router.query.package as string);
+        if (router.query.version) libraries.find((lib) => lib.name === router.query.package as string && lib.packageVersion === router.query.version as string);
+
         if (!pkg) return;
 
         const name = pkg.name;

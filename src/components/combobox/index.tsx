@@ -24,7 +24,7 @@ export function Combobox({
 }: IProps) {
     const [open, setOpen] = React.useState(false);
 
-    console.log('Combobox', { onSelect, options, value, emptyMessage, selectMessage, searchMessage });
+    //console.log('Combobox', { onSelect, options, value, emptyMessage, selectMessage, searchMessage });
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
