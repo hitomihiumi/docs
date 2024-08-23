@@ -1,4 +1,4 @@
-import { jbMono, orbitron } from "@/lib/constants";
+import { jbMono, archivo } from "@/lib/constants";
 import {
   Separator,
   Button,
@@ -17,7 +17,7 @@ export default function Hero() {
         <Heading.H1
           className={cn(
             "lg:text-8xl md:text-7xl text-5xl uppercase select-none text-center",
-            orbitron.className
+              archivo.className
           )}
         >
           lazycanvas

@@ -1,4 +1,4 @@
-import { JetBrains_Mono, Inter, Orbitron } from "next/font/google";
+import { JetBrains_Mono, Inter, Archivo_Black } from "next/font/google";
 
 interface IFeature {
   title: string;
@@ -9,8 +9,9 @@ interface ITools extends IFeature {
   link: string;
 }
 
-export const orbitron = Orbitron({
+export const archivo = Archivo_Black({
   subsets: ["latin"],
+  weight: "400"
 });
 
 export const jbMono = JetBrains_Mono({

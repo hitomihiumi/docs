@@ -8,7 +8,7 @@ function Icon() {
 
   if (loaded) {
     return (
-      // eslint-disable-next-line @next/next/no-img-element
+      // eslint-disable-.next-line @.next/.next/no-img-element
       <img
         src={DISCORD_ICON}
         alt="NeplexLabs"

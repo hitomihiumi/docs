@@ -27,12 +27,12 @@ const nextConfig = {
     reactStrictMode: false,
     pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
     typescript: {
-        ignoreBuildErrors: true
+        ignoreBuildErrors: false
     },
     eslint: {
-        ignoreDuringBuilds: true
+        ignoreDuringBuilds: false
     },
-    swcMinify: true,
+    swcMinify: false,
     // experimental: {
     //     mdxRs: true
     // }

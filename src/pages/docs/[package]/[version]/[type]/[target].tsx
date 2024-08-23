@@ -20,7 +20,6 @@ import {
   VscSymbolVariable,
 } from "react-icons/vsc";
 import { DocumentationStore } from "@/lib/store";
-import {docs} from "@/lib/docs";
 
 function filterDuplicates<T>(array: T[]): T[] {
     return array.filter((item, index, self) =>
@@ -37,28 +36,17 @@ export default function DocsPage() {
    const libNames = filterDuplicates(libraries.map((library) => library.name))
     const libVersions = libraries.map((library) => ({ version: library.packageVersion, name: library.name }));
 
-   console.log('Список имён', libNames)
-    console.log('Список библеотек', libraries)
-    console.log('Список версий', libVersions)
   useEffect(() => {
     if (!pkg || !type || !target || !version) return;
-
-    //console.log((typeof libraries)[0])
-      //console.log('версия', version)
-      //console.log('Список имён', libNames)
-        //console.log('Список библеотек', libraries)
-        //console.log('Список версий', libVersions)
 
     if (pkg === currentLib?.name && version === currentLib?.packageVersion) return;
 
     var lib;
       libraries.forEach((library) => {
-          //console.log('библеотека', library)
           if (library.name === router.query.package && library.packageVersion === router.query.version) {
               lib = library;
           }
       })
-    //console.log(lib)
     if (!lib) return;
 
     setCurrentLib(lib);
@@ -77,12 +65,7 @@ export default function DocsPage() {
   const selectList = (
     <Combobox
       onSelect={(val) => {
-         var lib;
-          libraries.forEach((library) => {
-              if (library.name === val) {
-                  lib = library;
-              }
-        });
+         const lib = libraries.find((library) => library.name === val);
         if (!lib) return;
         const navigationConfig = {
           type: lib.classes.length
@@ -115,12 +98,7 @@ export default function DocsPage() {
     const selectList_version = (
       <Combobox
           onSelect={(val) => {
-              var lib;
-              libraries.forEach((library) => {
-                  if (library.packageVersion === val) {
-                      lib = library;
-                  }
-              });
+              const lib = libraries.find((library) => library.name === currentLib.name && library.packageVersion === val);
             if (!lib) return;
             const navigationConfig = {
               type: lib.classes.length

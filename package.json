@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 8080",
     "build": "next build",
-    "start": "next start"
+    "start": "next start -p 8080"
   },
   "dependencies": {
-    "@edge-ui/react": "0.0.11",
+    "@edge-ui/react": "^0.0.11",
     "@hitomihiumi/micro-docgen": "^0.2.1",
     "@next/mdx": "^13.4.7",
     "@radix-ui/react-collapsible": "^1.1.0",

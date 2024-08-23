@@ -9,8 +9,7 @@ export default function DocumentationEntryPoint() {
   const router = useRouter();
 
     useEffect(() => {
-       if (!router.query.package) return;
-         var pkg = libraries.find((lib) => lib.name === router.query.package as string);
+         var pkg = libraries.find((lib) => lib.name === 'lazycanvas');
 
             if (!pkg) return;
 
@@ -22,7 +21,7 @@ export default function DocumentationEntryPoint() {
             if (!target || !type) return;
 
             router.push(`/docs/${encodeURIComponent(name)}/${encodeURIComponent(version)}/${encodeURIComponent(type)}/${encodeURIComponent(target)}`);
-    }, [router.query.package]);
+    });
 
   return (
     <Container>
