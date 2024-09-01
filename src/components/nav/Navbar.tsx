@@ -38,6 +38,17 @@ export default function Navbar() {
                 Documentation
               </Link>
               <Link
+                  href="/guide"
+                  className={cn(
+                      'transition-colors hover:text-foreground/80',
+                      pathname?.startsWith('/guide')
+                          ? 'text-foreground font-bold'
+                          : 'text-foreground/60'
+                  )}
+              >
+                Guide
+              </Link>
+              <Link
                 href={"https://github.com/hitomihiumi/lazy-canvas-ts"}
                 className={cn(
                   "hidden text-foreground/60 transition-colors hover:text-foreground/80 lg:block"

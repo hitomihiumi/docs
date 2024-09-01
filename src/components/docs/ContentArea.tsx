@@ -37,16 +37,16 @@ export function ContentArea({ data }: IProps) {
         : type === "enum"
         ? "enum"
         : "types";
-    console.log('t', t)
+    //console.log('t', t)
     const res = data[t as Exclude<keyof typeof data, "name">] as unknown as {
       data: DocumentedClass | DocumentedTypes | DocumentedFunction;
     }[];
-    console.log('res', res)
+    //console.log('res', res)
     const entity: IContentAreaProps = {} as IContentAreaProps;
     entity.data = res.find((e) => e.data.name === target)?.data || null;
     entity.type = type;
 
-    console.log('entity', entity)
+    //console.log('entity', entity)
 
     return entity;
   });
@@ -132,7 +132,7 @@ export function ContentArea({ data }: IProps) {
   return (
     <>
       <HeadingMeta
-        title={`${currentItem.data?.name}`}
+        title={`${currentItem.data?.name} - ${packageName}`}
         description={`Documentation for ${currentItem.data?.name}.`}
       />
       <div className="mb-16">

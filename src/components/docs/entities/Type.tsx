@@ -1,4 +1,4 @@
-import { docsLink } from "@/lib/docs";
+import { docsLink } from "@/lib/store";
 import { cleanupTypes } from "@/lib/util";
 import { cn } from "@edge-ui/react";
 import Link from "next/link";

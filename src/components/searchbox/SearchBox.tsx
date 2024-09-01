@@ -1,4 +1,4 @@
-import { searchDocs } from '@/lib/docs';
+import { searchDocs } from '@/lib/store';
 import { Button, cn, useDebounce } from '@edge-ui/react';
 import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/cmdk/CommandDialog';
 import { Search } from 'lucide-react';

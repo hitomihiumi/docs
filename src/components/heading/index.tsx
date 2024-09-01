@@ -21,7 +21,7 @@ export function HeadingMeta(props: IProps) {
       <meta name="description" content={description} />
       <meta
         name="keywords"
-        content="canvas,node-canvas,javascript,typescript,image-generation"
+        content="canvas,node-canvas,javascript,typescript,image-generation,lazycanvas,lazy-canvas,hitomihiumi,@hitomihiumi/lazy-canvas"
       />
       <meta name="theme-color" content="#ff8a8a" />
     </Head>
