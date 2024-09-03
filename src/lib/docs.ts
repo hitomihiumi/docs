@@ -85,4 +85,31 @@ docs.modules.forEach((versions) =>
         (c) => (c.data.__type = "enum")
     ));
 
-docs.modules.sort((a, b) => a.packageVersion.split('-dev')[0].localeCompare(b.packageVersion.split('-dev')[0]));
+function compareVersions(a: string, b: string): number {
+    const parseVersion = (version: string) => {
+        const [mainVersion, suffix] = version.split('-');
+        const versionParts = mainVersion.split('.').map(Number);
+        return { versionParts, suffix: suffix || '' };
+    };
+
+    const { versionParts: aParts, suffix: aSuffix } = parseVersion(a);
+    const { versionParts: bParts, suffix: bSuffix } = parseVersion(b);
+
+    for (let i = 0; i < 3; i++) {
+        if (aParts[i] !== bParts[i]) {
+            return aParts[i] - bParts[i];
+        }
+    }
+
+    if (aSuffix === '' && bSuffix === '') return 0;
+    if (aSuffix === '') return 1;
+    if (bSuffix === '') return -1;
+
+    return aSuffix.localeCompare(bSuffix);
+}
+
+function sortPackages(packages: Docs): Array<Documentation> {
+    return packages.modules.sort((a, b) => compareVersions(a.packageVersion, b.packageVersion));
+}
+
+sortPackages(docs);

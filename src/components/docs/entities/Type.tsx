@@ -1,10 +1,75 @@
-import { docsLink } from "@/lib/store";
+import { EXTERNAL_LINKS, DocumentationStore } from "@/lib/store";
 import { cleanupTypes } from "@/lib/util";
 import { cn } from "@edge-ui/react";
 import Link from "next/link";
 import { useMemo } from "react";
+import { useRouter } from 'next/router';
+import { Documentation } from "@hitomihiumi/micro-docgen";
+
+/*
+                module: mod.name,
+                href: `/docs/${encodeURIComponent(mod.name)}/${encodeURIComponent(mod.packageVersion)}/enum/${c.data.name}`,
+                target: c.data.name,
+                type: "enum",
+ */
 
 export function Type({ types, prefix }: { types: string[]; prefix?: string }) {
+  const router = useRouter();
+
+  const docsLink = (() => {
+    type DocLink = {
+      module: string;
+      type: "class" | "function" | "type" | "variable" | "enum";
+      href: string;
+      target: string;
+    };
+
+    const entries: DocLink[] = [];
+
+    //@ts-ignore
+    let lib: Documentation = DocumentationStore.libraries.find((module) => module.name === router.query.package as string && module.packageVersion === router.query.version as string)
+
+    lib.classes.forEach((c) =>
+        entries.push({
+          module: lib.name,
+          href: `/docs/${encodeURIComponent(lib.name)}/${encodeURIComponent(lib.packageVersion)}/class/${c.data.name}`,
+          target: c.data.name,
+          type: "class",
+        }));
+    lib.functions.forEach((c) =>
+        entries.push({
+          module: lib.name,
+          href: `/docs/${encodeURIComponent(lib.name)}/${encodeURIComponent(lib.packageVersion)}/function/${c.data.name}`,
+          target: c.data.name,
+          type: "function",
+        }));
+    lib.types.forEach((c) =>
+        entries.push({
+          module: lib.name,
+          href: `/docs/${encodeURIComponent(lib.name)}/${encodeURIComponent(lib.packageVersion)}/type/${c.data.name}`,
+          target: c.data.name,
+          type: "type",
+        }));
+    lib.variables.forEach((c) =>
+        entries.push({
+          module: lib.name,
+          href: `/docs/${encodeURIComponent(lib.name)}/${encodeURIComponent(lib.packageVersion)}/variable/${c.data.name}`,
+          target: c.data.name,
+          type: "variable",
+        }));
+    lib.enum.forEach((c) =>
+        entries.push({
+          module: lib.name,
+          href: `/docs/${encodeURIComponent(lib.name)}/${encodeURIComponent(lib.packageVersion)}/enum/${c.data.name}`,
+          target: c.data.name,
+          type: "enum",
+        })
+    );
+
+
+    return { internal: entries, external: EXTERNAL_LINKS };
+  })();
+
   const resolvedType = useMemo(() => {
     const resolved: JSX.Element[] = [];
 
@@ -12,9 +77,9 @@ export function Type({ types, prefix }: { types: string[]; prefix?: string }) {
 
     for (let i = 0; i < _types.length; i++) {
       const type = _types[i];
-      const mod = docsLink.internal.find((link) => link.target === type);
+      const mod = docsLink.internal.find((entry) => entry.target === type);
       if (!mod) {
-        if (!(type in docsLink.external)) {
+        if (!(type in EXTERNAL_LINKS)) {
           resolved.push(
             <span
               key={`${i}-${type}-unresolved`}
@@ -36,7 +101,7 @@ export function Type({ types, prefix }: { types: string[]; prefix?: string }) {
 
         resolved.push(
           <Link
-            href={docsLink.external[type as keyof typeof docsLink.external]}
+            href={EXTERNAL_LINKS[type as keyof typeof EXTERNAL_LINKS]}
             key={`${i}-${type}-${mod}`}
             className="text-teal-600 font-semibold text-sm"
             rel="noreferrer noopener"

@@ -38,7 +38,7 @@ export function ParameterTable({
             {hasDescription ? (
               <TableCell>
                 <Paragraph>
-                  <pre className={inter.className}>{param.description}, </pre>
+                  <pre className={inter.className}>{param.description}</pre>
                 </Paragraph>
               </TableCell>
             ) : null}

@@ -13,7 +13,7 @@ type Doc = {
     displayName: string;
 };
 
-const EXTERNAL_LINKS = {
+export const EXTERNAL_LINKS = {
     string:
         "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
     String:
@@ -82,65 +82,6 @@ const EXTERNAL_LINKS = {
         "https://nodejs.org/dist/latest/docs/api/http.html#http_http_request_options_callback",
     Response: "https://developer.mozilla.org/en-US/docs/Web/API/Response",
 };
-
-export const docsLink = (() => {
-    type DocLink = {
-        module: string;
-        type: "class" | "function" | "type" | "variable" | "enum";
-        href: string;
-        target: string;
-    };
-
-    const entries: DocLink[] = [];
-
-    const mods = DocumentationStore.libraries;
-
-    //console.log('mods', mods)
-
-    for (const mod of mods) {
-        //console.log(mod)
-        mod.classes.forEach((c) =>
-            entries.push({
-                module: mod.name,
-                href: `/docs/${encodeURIComponent(mod.name)}/${encodeURIComponent(mod.packageVersion)}/class/${c.data.name}`,
-                target: c.data.name,
-                type: "class",
-            }));
-        mod.functions.forEach((c) =>
-            entries.push({
-                module: mod.name,
-                href: `/docs/${encodeURIComponent(mod.name)}/${encodeURIComponent(mod.packageVersion)}/function/${c.data.name}`,
-                target: c.data.name,
-                type: "function",
-            }));
-        mod.types.forEach((c) =>
-            entries.push({
-                module: mod.name,
-                href: `/docs/${encodeURIComponent(mod.name)}/${encodeURIComponent(mod.packageVersion)}/type/${c.data.name}`,
-                target: c.data.name,
-                type: "type",
-            }));
-        mod.variables.forEach((c) =>
-            entries.push({
-                module: mod.name,
-                href: `/docs/${encodeURIComponent(mod.name)}/${encodeURIComponent(mod.packageVersion)}/variable/${c.data.name}`,
-                target: c.data.name,
-                type: "variable",
-            }));
-        mod.enum.forEach((c) =>
-            entries.push({
-                module: mod.name,
-                href: `/docs/${encodeURIComponent(mod.name)}/${encodeURIComponent(mod.packageVersion)}/enum/${c.data.name}`,
-                target: c.data.name,
-                type: "enum",
-            })
-        );
-    }
-
-    return { internal: entries, external: EXTERNAL_LINKS };
-})();
-
-//console.log(docsLink)
 
 export function searchDocs(query: string){
     var props: Doc[] = [];

@@ -135,6 +135,20 @@ function MobileNav() {
                   onClick={() => {
                     setOpen(false);
                   }}
+                  href="/guide"
+                  className={cn(
+                    "transition-colors hover:text-foreground/80",
+                      "/guide" === pathname
+                          ? "text-foreground font-bold"
+                      : "text-foreground/60"
+                  )}
+                >
+                  Guide
+                 </Link>
+                <Link
+                  onClick={() => {
+                    setOpen(false);
+                  }}
                   href={"https://github.com/hitomihiumi/lazy-canvas-ts"}
                   className={cn(
                     "text-foreground/60 transition-colors hover:text-foreground/80"
