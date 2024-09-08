@@ -12,6 +12,7 @@ import { SunIcon, MoonIcon, Menu } from "lucide-react";
 import { useRouter } from "next/router";
 import { SearchBox } from "../searchbox/SearchBox";
 import { useState } from "react";
+import Image from 'next/image';
 
 export default function Navbar() {
   const { isDark, toggle } = useTheme();
@@ -22,6 +23,13 @@ export default function Navbar() {
       <div className="container py-2 hidden lg:flex">
         <div className="mr-4 hidden md:flex justify-between w-full">
           <div className="flex items-center gap-6">
+            <Image
+                src="/icon.jpg"
+                width={50}
+                height={50}
+                alt="Picture of the author"
+                className={"w-max h-max"}
+            />
             <Link href="/" className="mr-6 font-semibold">
               LazyCanvas
             </Link>
@@ -91,7 +99,7 @@ function MobileNav() {
 
   return (
     <div className="lg:hidden p-2 flex items-center justify-between">
-      <Link href="/" className="font-semibold">
+      <Link href="/" className="font-semibold pl-4">
         LazyCanvas
       </Link>
       <div className="flex flex-row items-center gap-4">

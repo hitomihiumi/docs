@@ -30,7 +30,7 @@ function filterDuplicates<T>(array: T[]): T[] {
 export default function DocsPage() {
   const router = useRouter();
   const { package: pkg, version, type, target } = router.query;
-  const {  libraries,  } = DocumentationStore;
+  const libraries = DocumentationStore.libraries;
   const [currentLib, setCurrentLib] = useState<(typeof libraries)[0]>();
 
    const libNames = filterDuplicates(libraries.map((library) => library.name))

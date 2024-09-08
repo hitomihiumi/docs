@@ -10,7 +10,7 @@ export const pages = [
         displayName: 'Lazy Canvas',
         pages: [
             {
-                name: 'getting-started',
+                name: 'getting-started.md',
                 displayName: 'Getting Started',
                 component: lazy(() => import('@/pages/guide/_guides/lazy-canvas/getting-started.md')),
             },
@@ -53,6 +53,27 @@ export const pages = [
                 name: 'link',
                 displayName: 'Link',
                 component: lazy(() => import('@/pages/guide/_guides/lazy-canvas/link.md')),
+            },
+            {
+                name: 'plugins',
+                displayName: 'Plugins',
+                component: lazy(() => import('@/pages/guide/_guides/lazy-canvas/plugins.md')),
+            },
+        ],
+    },
+    {
+        name: 'discord-cards',
+        displayName: 'Discord Cards',
+        pages: [
+            {
+                name: 'getting-started.md',
+                displayName: 'Getting Started',
+                component: lazy(() => import('@/pages/guide/_guides/discord-cards/getting-started.md')),
+            },
+            {
+                name: 'cards.md',
+                displayName: 'Cards',
+                component: lazy(() => import('@/pages/guide/_guides/discord-cards/cards.md')),
             },
         ],
     },
