@@ -3,27 +3,33 @@ import { DocumentationStore } from '@/lib/store';
 import { Loader } from '@edge-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
+import {Docs, docsProcess, fetchDocs} from "@/lib/docs";
 
 export default function DocumentationEntryPoint() {
     const router = useRouter();
-    const { libraries } = DocumentationStore;
 
     useEffect(() => {
         if (!router.query.package) return;
-        //console.log(libraries)
-        var pkg = libraries.find((lib) => lib.name === router.query.package as string);
-        if (router.query.version) libraries.find((lib) => lib.name === router.query.package as string && lib.packageVersion === router.query.version as string);
+        let docs: Docs = { modules: [] };
+        fetchDocs().then((data) => {
+            docs.modules = data;
+            docs = docsProcess(docs);
 
-        if (!pkg) return;
+            DocumentationStore.libraries = docs.modules;
+            var pkg = DocumentationStore.libraries.find((lib) => lib.name === router.query.package as string);
+            if (router.query.version) DocumentationStore.libraries.find((lib) => lib.name === router.query.package as string && lib.packageVersion === router.query.version as string);
 
-        const name = pkg.name;
-        const version = pkg.packageVersion;
-        const type = pkg.classes.length ? 'class' : pkg.types.length ? 'type' : pkg.functions.length ? 'function' : '';
-        const target = pkg.classes.length ? pkg.classes[0].data.name : pkg.types.length ? pkg.types[0].data.name : pkg.functions.length ? pkg.functions[0].data.name : '';
+            if (!pkg) return;
 
-        if (!target || !type) return;
+            const name = pkg.name;
+            const version = pkg.packageVersion;
+            const type = pkg.classes.length ? 'class' : pkg.types.length ? 'type' : pkg.functions.length ? 'function' : '';
+            const target = pkg.classes.length ? pkg.classes[0].data.name : pkg.types.length ? pkg.types[0].data.name : pkg.functions.length ? pkg.functions[0].data.name : '';
 
-        router.push(`/docs/${encodeURIComponent(name)}/${encodeURIComponent(version)}/${encodeURIComponent(type)}/${encodeURIComponent(target)}`);
+            if (!target || !type) return;
+
+            router.push(`/docs/${encodeURIComponent(name)}/${encodeURIComponent(version)}/${encodeURIComponent(type)}/${encodeURIComponent(target)}`);
+        });
     }, [router.query.package, router.query.version]);
 
     return (

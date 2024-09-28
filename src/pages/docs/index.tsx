@@ -2,14 +2,20 @@ import { Container } from "@/components/layout/Container";
 import { Loader } from "@edge-ui/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { fetchDocs, docsProcess, Docs } from "@/lib/docs";
 import { DocumentationStore } from "@/lib/store";
-const { libraries } = DocumentationStore;
 
 export default function DocumentationEntryPoint() {
   const router = useRouter();
 
     useEffect(() => {
-         var pkg = libraries.find((lib) => lib.name === 'lazycanvas');
+        let docs: Docs = { modules: [] };
+        fetchDocs().then((data) => {
+            docs.modules = data;
+            docs = docsProcess(docs);
+
+            DocumentationStore.libraries = docs.modules;
+            var pkg = DocumentationStore.libraries.find((lib) => lib.name === 'lazycanvas');
 
             if (!pkg) return;
 
@@ -21,6 +27,7 @@ export default function DocumentationEntryPoint() {
             if (!target || !type) return;
 
             router.push(`/docs/${encodeURIComponent(name)}/${encodeURIComponent(version)}/${encodeURIComponent(type)}/${encodeURIComponent(target)}`);
+        });
     });
 
   return (

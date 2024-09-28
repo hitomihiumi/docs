@@ -7,11 +7,14 @@ export interface Docs {
 export var docs = { modules: [] } as Docs;
 
 // @ts-ignore
-async function fetchAndProcessDocs(docs: Docs): Promise<Docs>  {
-    const rawUrl = 'https://raw.githubusercontent.com/hitomihiumi/docsholder/master/packages/versions.json';
-
+export async function fetchDocs(): Promise<Documentation[]>  {
     try {
-        const response = await fetch(rawUrl);
+        const response = await fetch('https://api.hitomihiumi.xyz/v1/docs/', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
         if (!response.ok) {
             throw new Error(`Ошибка при загрузке файла: ${response.statusText}`);
@@ -19,68 +22,37 @@ async function fetchAndProcessDocs(docs: Docs): Promise<Docs>  {
 
         const data = await response.json();
 
-        var result = await processDocs(data, docs)
-
-        //console.log('Результат:', result);
-
-        return result;
+        return data;
     } catch (error) {
         console.error('Ошибка:', error);
     }
 }
 
-async function processDocs(data: any, docs: Docs): Promise<Docs> {
-    //console.log('Обрабатываемые данные:', data.module);
-    data.modules.forEach((module: any) => {
-        //console.log('Обрабатываемый модуль:', module)
-        data.module[module].forEach(async (version: any) => {
-            const rawUrl = `https://raw.githubusercontent.com/hitomihiumi/docsholder/master/packages/${module}/${version}.json`;
-
-            try {
-                const response = await fetch(rawUrl);
-
-                if (!response.ok) {
-                    throw new Error(`Ошибка при загрузке файла: ${response.statusText}`);
-                }
-
-                const data = await response.json();
-                //console.log(data)
-                docs.modules.push(data);
-            } catch (error) {
-                console.error('Ошибка:', error);
-            }
-        });
-    });
-    //console.log('Обработанные данные:', data);
+export function docsProcess(docs: Docs) {
+    docs.modules.forEach((versions) =>
+        versions.classes.forEach(
+            // @ts-expect-error
+            (c) => (c.data.__type = "class")
+        ))
+    docs.modules.forEach((versions) =>
+        versions.functions.forEach(
+            // @ts-expect-error
+            (c) => (c.data.__type = "function")
+        ))
+    docs.modules.forEach((versions) =>
+        versions.types.forEach(
+            // @ts-expect-error
+            (c) => (c.data.__type = "type")
+        ));
+    docs.modules.forEach((versions) =>
+        versions.variables.forEach(
+            // @ts-expect-error
+            (c) => (c.data.__type = "variable")
+        ));
+    docs.modules.forEach((versions) =>
+        versions.enum.forEach(
+            // @ts-expect-error
+            (c) => (c.data.__type = "enum")
+        ));
     return docs;
 }
-
-(async () => {
-    docs = await fetchAndProcessDocs(docs);
-})();
-
-docs.modules.forEach((versions) =>
-    versions.classes.forEach(
-        // @ts-expect-error
-        (c) => (c.data.__type = "class")
-    ))
-docs.modules.forEach((versions) =>
-    versions.functions.forEach(
-        // @ts-expect-error
-        (c) => (c.data.__type = "function")
-    ))
-docs.modules.forEach((versions) =>
-    versions.types.forEach(
-        // @ts-expect-error
-        (c) => (c.data.__type = "type")
-    ));
-docs.modules.forEach((versions) =>
-    versions.variables.forEach(
-        // @ts-expect-error
-        (c) => (c.data.__type = "variable")
-    ));
-docs.modules.forEach((versions) =>
-    versions.enum.forEach(
-        // @ts-expect-error
-        (c) => (c.data.__type = "enum")
-    ));

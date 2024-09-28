@@ -1,13 +1,8 @@
-import { docs, Docs } from './docs';
+import { docs } from './docs';
 import Fuse from "fuse.js";
-import type { Documentation } from "@hitomihiumi/micro-docgen";
-
-function sortPackages(packages: Array<Documentation>): Array<Documentation> {
-    return packages.sort((a, b) => b.metadata.timestamp - a.metadata.timestamp);
-}
 
 export const DocumentationStore = {
-    libraries: sortPackages(docs.modules),
+    libraries: docs.modules,
 };
 
 type Doc = {

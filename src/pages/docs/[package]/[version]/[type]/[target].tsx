@@ -20,6 +20,7 @@ import {
   VscSymbolVariable,
 } from "react-icons/vsc";
 import { DocumentationStore } from "@/lib/store";
+import {Docs, docsProcess, fetchDocs} from "@/lib/docs";
 
 function filterDuplicates<T>(array: T[]): T[] {
     return array.filter((item, index, self) =>
@@ -30,7 +31,7 @@ function filterDuplicates<T>(array: T[]): T[] {
 export default function DocsPage() {
   const router = useRouter();
   const { package: pkg, version, type, target } = router.query;
-  const libraries = DocumentationStore.libraries;
+  var libraries = DocumentationStore.libraries;
   const [currentLib, setCurrentLib] = useState<(typeof libraries)[0]>();
 
    const libNames = filterDuplicates(libraries.map((library) => library.name))
@@ -41,15 +42,22 @@ export default function DocsPage() {
 
     if (pkg === currentLib?.name && version === currentLib?.packageVersion) return;
 
-    var lib;
-      libraries.forEach((library) => {
-          if (library.name === router.query.package && library.packageVersion === router.query.version) {
-              lib = library;
-          }
-      })
-    if (!lib) return;
+      let docs: Docs = { modules: [] };
+      fetchDocs().then((data) => {
+          docs.modules = data;
+          docs = docsProcess(docs);
 
-    setCurrentLib(lib);
+          libraries = DocumentationStore.libraries = docs.modules;
+          var lib;
+          libraries.forEach((library) => {
+              if (library.name === router.query.package && library.packageVersion === router.query.version) {
+                  lib = library;
+              }
+          })
+          if (!lib) return;
+
+          setCurrentLib(lib);
+      })
   }, [pkg, type, target, version]);
 
   if (!currentLib) {
