@@ -21,12 +21,7 @@ import {
 } from "react-icons/vsc";
 import { DocumentationStore } from "@/lib/store";
 import {Docs, docsProcess, fetchDocs} from "@/lib/docs";
-
-function filterDuplicates<T>(array: T[]): T[] {
-    return array.filter((item, index, self) =>
-        index === self.findIndex((t) => JSON.stringify(t) === JSON.stringify(item))
-    );
-}
+import { filterDuplicates } from "@/lib/util";
 
 export default function DocsPage() {
   const router = useRouter();

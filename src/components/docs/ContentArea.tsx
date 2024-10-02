@@ -37,16 +37,12 @@ export function ContentArea({ data }: IProps) {
         : type === "enum"
         ? "enum"
         : "types";
-    //console.log('t', t)
     const res = data[t as Exclude<keyof typeof data, "name">] as unknown as {
       data: DocumentedClass | DocumentedTypes | DocumentedFunction;
     }[];
-    //console.log('res', res)
     const entity: IContentAreaProps = {} as IContentAreaProps;
     entity.data = res.find((e) => e.data.name === target)?.data || null;
     entity.type = type;
-
-    //console.log('entity', entity)
 
     return entity;
   });
@@ -109,9 +105,6 @@ export function ContentArea({ data }: IProps) {
           : type === "enum"
           ? "enum"
           : "types";
-      //console.log(t)
-      //console.log(data[t as Exclude<keyof typeof data, "name">])
-      //console.log(data)
       const res = data[t as Exclude<keyof typeof data, "name">] as unknown as {
         data: DocumentedClass | DocumentedTypes | DocumentedFunction;
       }[];
@@ -123,9 +116,6 @@ export function ContentArea({ data }: IProps) {
       setCurrentItem(entity);
     }
   }, [target, type, packageName, packageVersion, data]);
-
-  //console.log(currentItem)
-
 
   if (!currentItem || currentItem.type !== type || currentItem.data?.name !== target) return <></>;
 

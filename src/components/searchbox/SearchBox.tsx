@@ -1,5 +1,5 @@
 import { searchDocs } from '@/lib/store';
-import { Button, cn, useDebounce } from '@edge-ui/react';
+import {Button, cn, useDebounce} from '@edge-ui/react';
 import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/cmdk/CommandDialog';
 import { Search } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
@@ -12,6 +12,7 @@ export function SearchBox() {
     const [value, setValue] = useState('');
     const query = useDebounce(value);
     const [result, setResult] = useState<ReturnType<typeof searchDocs>>([]);
+    const { package: pkg, version } = router.query;
 
     const runCommand = useCallback((cmd: () => void) => {
         setOpen(false);
@@ -26,7 +27,7 @@ export function SearchBox() {
 
     useEffect(() => {
         if (!query.length) return setResult([]);
-        setResult(searchDocs(query));
+        setResult(searchDocs(query).filter(prop => !prop.private && prop.version === version && prop.module === pkg));
     }, [query]);
 
     useEffect(() => {
@@ -58,7 +59,7 @@ export function SearchBox() {
                     setValue('');
                 }}
             >
-                <CommandInput placeholder="Search documentation or command..." value={value} onValueChange={onValueChange} />
+                <CommandInput placeholder={`Search on ${pkg}@${version}`} value={value} onValueChange={onValueChange} />
                 <CommandList>
                     <CommandEmpty>No results found.</CommandEmpty>
                     <CommandGroup heading={`Total ${result.length} results`}>

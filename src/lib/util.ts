@@ -44,3 +44,9 @@ export function cleanupTypes(t: string[]) {
         })
         .flat(2);
 }
+
+export function filterDuplicates<T>(array: T[]): T[] {
+    return array.filter((item, index, self) =>
+        index === self.findIndex((t) => JSON.stringify(t) === JSON.stringify(item))
+    );
+}

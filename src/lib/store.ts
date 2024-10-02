@@ -11,6 +11,8 @@ type Doc = {
     href: string;
     module: string;
     displayName: string;
+    version: string;
+    private: boolean;
 };
 
 export const EXTERNAL_LINKS = {
@@ -95,6 +97,8 @@ export function searchDocs(query: string){
                 name: cls.data.name,
                 type: "class",
                 displayName: cls.data.name,
+                version: mod.packageVersion,
+                private: cls.data.private
             });
 
             cls.data.methods.forEach((method) => {
@@ -106,6 +110,8 @@ export function searchDocs(query: string){
                     name: method.name,
                     type: "function",
                     displayName: `${cls.data.name}.${method.name}()`,
+                    version: mod.packageVersion,
+                    private: method.private
                 });
 
                 return props;
@@ -120,6 +126,8 @@ export function searchDocs(query: string){
                     name: prop.name,
                     type: "property",
                     displayName: `${cls.data.name}.${prop.name}`,
+                    version: mod.packageVersion,
+                    private: prop.private
                 });
 
                 return props;
@@ -135,6 +143,8 @@ export function searchDocs(query: string){
                 name: cls.data.name,
                 type: "type",
                 displayName: cls.data.name,
+                version: mod.packageVersion,
+                private: cls.data.private
             })
         );
 
@@ -145,6 +155,8 @@ export function searchDocs(query: string){
                 name: cls.data.name,
                 type: "function",
                 displayName: cls.data.name,
+                version: mod.packageVersion,
+                private: cls.data.private
             })
         );
 
@@ -155,6 +167,8 @@ export function searchDocs(query: string){
                 name: cls.data.name,
                 type: "variable",
                 displayName: cls.data.name,
+                version: mod.packageVersion,
+                private: cls.data.private
             })
         );
 
@@ -165,6 +179,8 @@ export function searchDocs(query: string){
                 name: cls.data.name,
                 type: "enum",
                 displayName: cls.data.name,
+                version: mod.packageVersion,
+                private: cls.data.private
             })
         );
         return props;
