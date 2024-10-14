@@ -59,7 +59,7 @@ export function SearchBox() {
                     setValue('');
                 }}
             >
-                <CommandInput placeholder={`Search on ${pkg}@${version}`} value={value} onValueChange={onValueChange} />
+                <CommandInput placeholder={pkg ? `Search on ${pkg}@${version}` : `Search unable`} value={value} onValueChange={onValueChange} />
                 <CommandList>
                     <CommandEmpty>No results found.</CommandEmpty>
                     <CommandGroup heading={`Total ${result.length} results`}>

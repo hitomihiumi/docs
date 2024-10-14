@@ -59,6 +59,11 @@ export const pages = [
                 displayName: 'Plugins',
                 component: lazy(() => import('@/pages/guide/_guides/lazy-canvas/plugins.md')),
             },
+            {
+                name: 'svg',
+                displayName: 'SVG',
+                component: lazy(() => import('@/pages/guide/_guides/lazy-canvas/svg.md')),
+            },
         ],
     },
     {
