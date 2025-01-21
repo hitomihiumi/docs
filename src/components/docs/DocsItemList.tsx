@@ -12,7 +12,7 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 interface IProps {
   name: string;
   data: {
-    packageVersion: string | string[] | undefined;
+    version: string | string[] | undefined;
     name: string; type: string; lib: string }[];
     link?: (name: string) => string;
     icon?: React.ReactNode;
@@ -42,7 +42,7 @@ export function DocsItemList({ data, name, link, icon }: IProps) {
               className={cn(
                 "text-base font-normal text-muted-foreground cursor-pointer",
                   item.lib === router.query.package &&
-                  item.packageVersion === router.query.version &&
+                  item.version === router.query.version &&
                   item.name === router.query.target &&
                   item.type === router.query.type
                   ? "font-medium text-secondary"

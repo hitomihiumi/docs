@@ -17,12 +17,12 @@ export default function DocumentationEntryPoint() {
 
             DocumentationStore.libraries = docs.modules;
             var pkg = DocumentationStore.libraries.find((lib) => lib.name === router.query.package as string);
-            if (router.query.version) DocumentationStore.libraries.find((lib) => lib.name === router.query.package as string && lib.packageVersion === router.query.version as string);
+            if (router.query.version) DocumentationStore.libraries.find((lib) => lib.name === router.query.package as string && lib.version === router.query.version as string);
 
             if (!pkg) return;
 
             const name = pkg.name;
-            const version = pkg.packageVersion;
+            const version = pkg.version;
             const type = pkg.classes.length ? 'class' : pkg.types.length ? 'type' : pkg.functions.length ? 'function' : '';
             const target = pkg.classes.length ? pkg.classes[0].data.name : pkg.types.length ? pkg.types[0].data.name : pkg.functions.length ? pkg.functions[0].data.name : '';
 

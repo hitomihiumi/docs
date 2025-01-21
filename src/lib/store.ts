@@ -93,24 +93,24 @@ export function searchDocs(query: string){
         mod.classes.forEach((cls) => {
             props.push({
                 module: mod.name,
-                href: `/docs/${encodeURIComponent(mod.name)}/${encodeURIComponent(mod.packageVersion)}/class/${cls.data.name}`,
+                href: `/docs/${encodeURIComponent(mod.name)}/${encodeURIComponent(mod.version)}/class/${cls.data.name}`,
                 name: cls.data.name,
                 type: "class",
                 displayName: cls.data.name,
-                version: mod.packageVersion,
+                version: mod.version,
                 private: cls.data.private
             });
 
             cls.data.methods.forEach((method) => {
                 props.push({
-                    href: `/docs/${encodeURIComponent(mod.name)}/${encodeURIComponent(mod.packageVersion)}/class/${
+                    href: `/docs/${encodeURIComponent(mod.name)}/${encodeURIComponent(mod.version)}/class/${
                         cls.data.name
                     }?scrollTo=fm-${method.name}`,
                     module: mod.name,
                     name: method.name,
                     type: "function",
                     displayName: `${cls.data.name}.${method.name}()`,
-                    version: mod.packageVersion,
+                    version: mod.version,
                     private: method.private
                 });
 
@@ -119,14 +119,14 @@ export function searchDocs(query: string){
 
             cls.data.properties.forEach((prop) => {
                 props.push({
-                    href: `/docs/${encodeURIComponent(mod.name)}/${encodeURIComponent(mod.packageVersion)}/class/${
+                    href: `/docs/${encodeURIComponent(mod.name)}/${encodeURIComponent(mod.version)}/class/${
                         cls.data.name
                     }?scrollTo=p-${prop.name}`,
                     module: mod.name,
                     name: prop.name,
                     type: "property",
                     displayName: `${cls.data.name}.${prop.name}`,
-                    version: mod.packageVersion,
+                    version: mod.version,
                     private: prop.private
                 });
 
@@ -139,11 +139,11 @@ export function searchDocs(query: string){
         mod.types.forEach((cls) =>
             props.push({
                 module: mod.name,
-                href: `/docs/${encodeURIComponent(mod.name)}/${encodeURIComponent(mod.packageVersion)}/type/${cls.data.name}`,
+                href: `/docs/${encodeURIComponent(mod.name)}/${encodeURIComponent(mod.version)}/type/${cls.data.name}`,
                 name: cls.data.name,
                 type: "type",
                 displayName: cls.data.name,
-                version: mod.packageVersion,
+                version: mod.version,
                 private: cls.data.private
             })
         );
@@ -151,11 +151,11 @@ export function searchDocs(query: string){
         mod.functions.forEach((cls) =>
             props.push({
                 module: mod.name,
-                href: `/docs/${encodeURIComponent(mod.name)}/${encodeURIComponent(mod.packageVersion)}/function/${cls.data.name}`,
+                href: `/docs/${encodeURIComponent(mod.name)}/${encodeURIComponent(mod.version)}/function/${cls.data.name}`,
                 name: cls.data.name,
                 type: "function",
                 displayName: cls.data.name,
-                version: mod.packageVersion,
+                version: mod.version,
                 private: cls.data.private
             })
         );
@@ -163,11 +163,11 @@ export function searchDocs(query: string){
         mod.variables.forEach((cls) =>
             props.push({
                 module: mod.name,
-                href: `/docs/${encodeURIComponent(mod.name)}/${encodeURIComponent(mod.packageVersion)}/variable/${cls.data.name}`,
+                href: `/docs/${encodeURIComponent(mod.name)}/${encodeURIComponent(mod.version)}/variable/${cls.data.name}`,
                 name: cls.data.name,
                 type: "variable",
                 displayName: cls.data.name,
-                version: mod.packageVersion,
+                version: mod.version,
                 private: cls.data.private
             })
         );
@@ -175,11 +175,11 @@ export function searchDocs(query: string){
         mod.enum.forEach((cls) =>
             props.push({
                 module: mod.name,
-                href: `/docs/${encodeURIComponent(mod.name)}/${encodeURIComponent(mod.packageVersion)}/enum/${cls.data.name}`,
+                href: `/docs/${encodeURIComponent(mod.name)}/${encodeURIComponent(mod.version)}/enum/${cls.data.name}`,
                 name: cls.data.name,
                 type: "enum",
                 displayName: cls.data.name,
-                version: mod.packageVersion,
+                version: mod.version,
                 private: cls.data.private
             })
         );

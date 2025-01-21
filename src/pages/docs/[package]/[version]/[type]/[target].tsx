@@ -30,12 +30,12 @@ export default function DocsPage() {
   const [currentLib, setCurrentLib] = useState<(typeof libraries)[0]>();
 
    const libNames = filterDuplicates(libraries.map((library) => library.name))
-    const libVersions = libraries.map((library) => ({ version: library.packageVersion, name: library.name }));
+    const libVersions = libraries.map((library) => ({ version: library.version, name: library.name }));
 
   useEffect(() => {
     if (!pkg || !type || !target || !version) return;
 
-    if (pkg === currentLib?.name && version === currentLib?.packageVersion) return;
+    if (pkg === currentLib?.name && version === currentLib?.version) return;
 
       let docs: Docs = { modules: [] };
       fetchDocs().then((data) => {
@@ -45,7 +45,7 @@ export default function DocsPage() {
           libraries = DocumentationStore.libraries = docs.modules;
           var lib;
           libraries.forEach((library) => {
-              if (library.name === router.query.package && library.packageVersion === router.query.version) {
+              if (library.name === router.query.package && library.version === router.query.version) {
                   lib = library;
               }
           })
@@ -88,7 +88,7 @@ export default function DocsPage() {
         };
 
         router.push(
-          `/docs/${encodeURIComponent(lib.name)}/${encodeURIComponent(lib.packageVersion)}/${encodeURIComponent(
+          `/docs/${encodeURIComponent(lib.name)}/${encodeURIComponent(lib.version)}/${encodeURIComponent(
             navigationConfig.type
           )}/${encodeURIComponent(navigationConfig.target)}`
         );
@@ -101,7 +101,7 @@ export default function DocsPage() {
     const selectList_version = (
       <Combobox
           onSelect={(val) => {
-              const lib = libraries.find((library) => library.name === currentLib.name && library.packageVersion === val);
+              const lib = libraries.find((library) => library.name === currentLib.name && library.version === val);
             if (!lib) return;
             const navigationConfig = {
               type: lib.classes.length
@@ -121,12 +121,12 @@ export default function DocsPage() {
             };
 
             router.push(
-                `/docs/${encodeURIComponent(lib.name)}/${encodeURIComponent(lib.packageVersion)}/${encodeURIComponent(
+                `/docs/${encodeURIComponent(lib.name)}/${encodeURIComponent(lib.version)}/${encodeURIComponent(
                     navigationConfig.type
                 )}/${encodeURIComponent(navigationConfig.target)}`
             );
           }}
-          value={currentLib.packageVersion}
+          value={currentLib.version}
           // @ts-ignore
           options={libVersions.filter((l) => l.name === currentLib.name)
               .map((l) => ({
@@ -151,8 +151,8 @@ export default function DocsPage() {
                     name="Classes"
                     data={currentLib.classes.map((m) => {
                       return {
-                        lib: currentLib.name,
-                        packageVersion: currentLib.packageVersion,
+                        lib: currentLib.name, 
+                        version: currentLib.version,
                         name: m.data.name,
                         type: "class",
                       };
@@ -160,7 +160,7 @@ export default function DocsPage() {
                     link={(name) => {
                       return `/docs/${encodeURIComponent(
                         currentLib.name
-                      )}/${encodeURIComponent(currentLib.packageVersion)}/class/${name}`;
+                      )}/${encodeURIComponent(currentLib.version)}/class/${name}`;
                     }}
                     icon={<VscSymbolClass className="h-5 w-5" />}
                   />
@@ -171,7 +171,7 @@ export default function DocsPage() {
                     data={currentLib.functions.map((m) => {
                       return {
                         lib: currentLib.name,
-                        packageVersion: currentLib.packageVersion,
+                        version: currentLib.version,
                         name: m.data.name,
                         type: "function",
                       };
@@ -179,7 +179,7 @@ export default function DocsPage() {
                     link={(name) => {
                       return `/docs/${encodeURIComponent(
                         currentLib.name
-                      )}/${encodeURIComponent(currentLib.packageVersion)}/function/${name}`;
+                      )}/${encodeURIComponent(currentLib.version)}/function/${name}`;
                     }}
                     icon={<VscSymbolMethod className="h-5 w-5" />}
                   />
@@ -190,7 +190,7 @@ export default function DocsPage() {
                     data={currentLib.enum.map((m) => {
                       return {
                         lib: currentLib.name,
-                        packageVersion: currentLib.packageVersion,
+                        version: currentLib.version,
                         name: m.data.name,
                         type: "enum",
                       };
@@ -198,7 +198,7 @@ export default function DocsPage() {
                     link={(name) => {
                       return `/docs/${encodeURIComponent(
                         currentLib.name
-                      )}/${encodeURIComponent(currentLib.packageVersion)}/enum/${name}`;
+                      )}/${encodeURIComponent(currentLib.version)}/enum/${name}`;
                     }}
                     icon={<VscSymbolEnum className="h-5 w-5" />}
                   />
@@ -209,7 +209,7 @@ export default function DocsPage() {
                     data={currentLib.variables.map((m) => {
                       return {
                         lib: currentLib.name,
-                        packageVersion: currentLib.packageVersion,
+                        version: currentLib.version,
                         name: m.data.name,
                         type: "variable",
                       };
@@ -217,7 +217,7 @@ export default function DocsPage() {
                     link={(name) => {
                       return `/docs/${encodeURIComponent(
                         currentLib.name
-                      )}/${encodeURIComponent(currentLib.packageVersion)}/variable/${name}`;
+                      )}/${encodeURIComponent(currentLib.version)}/variable/${name}`;
                     }}
                     icon={<VscSymbolVariable className="h-5 w-5" />}
                   />
@@ -228,7 +228,7 @@ export default function DocsPage() {
                     data={currentLib.types.map((m) => {
                       return {
                         lib: currentLib.name,
-                        packageVersion: currentLib.packageVersion,
+                        version: currentLib.version,
                         name: m.data.name,
                         type: "type",
                       };
@@ -236,7 +236,7 @@ export default function DocsPage() {
                     link={(name) => {
                       return `/docs/${encodeURIComponent(
                         currentLib.name
-                      )}/${encodeURIComponent(currentLib.packageVersion)}/type/${name}`;
+                      )}/${encodeURIComponent(currentLib.version)}/type/${name}`;
                     }}
                     icon={<VscSymbolInterface className="h-5 w-5" />}
                   />
@@ -261,7 +261,7 @@ export default function DocsPage() {
                           data={currentLib.classes.map((m) => {
                             return {
                               lib: currentLib.name,
-                              packageVersion: currentLib.packageVersion,
+                              version: currentLib.version,
                               name: m.data.name,
                               type: "class",
                             };
@@ -269,7 +269,7 @@ export default function DocsPage() {
                           link={(name) => {
                             return `/docs/${encodeURIComponent(
                               currentLib.name
-                            )}/${encodeURIComponent(currentLib.packageVersion)}/class/${name}`;
+                            )}/${encodeURIComponent(currentLib.version)}/class/${name}`;
                           }}
                           icon={<VscSymbolClass className="h-5 w-5" />}
                         />
@@ -280,7 +280,7 @@ export default function DocsPage() {
                           data={currentLib.functions.map((m) => {
                             return {
                               lib: currentLib.name,
-                              packageVersion: currentLib.packageVersion,
+                              version: currentLib.version,
                               name: m.data.name,
                               type: "function",
                             };
@@ -288,7 +288,7 @@ export default function DocsPage() {
                           link={(name) => {
                             return `/docs/${encodeURIComponent(
                               currentLib.name
-                            )}/${encodeURIComponent(currentLib.packageVersion)}/function/${name}`;
+                            )}/${encodeURIComponent(currentLib.version)}/function/${name}`;
                           }}
                           icon={<VscSymbolMethod className="h-5 w-5" />}
                         />
@@ -299,7 +299,7 @@ export default function DocsPage() {
                           data={currentLib.enum.map((m) => {
                             return {
                               lib: currentLib.name,
-                              packageVersion: currentLib.packageVersion,
+                              version: currentLib.version,
                               name: m.data.name,
                               type: "enum",
                             };
@@ -307,7 +307,7 @@ export default function DocsPage() {
                           link={(name) => {
                             return `/docs/${encodeURIComponent(
                               currentLib.name
-                            )}/${encodeURIComponent(currentLib.packageVersion)}/enum/${name}`;
+                            )}/${encodeURIComponent(currentLib.version)}/enum/${name}`;
                           }}
                           icon={<VscSymbolEnum className="h-5 w-5" />}
                         />
@@ -318,7 +318,7 @@ export default function DocsPage() {
                           data={currentLib.variables.map((m) => {
                             return {
                               lib: currentLib.name,
-                              packageVersion: currentLib.packageVersion,
+                              version: currentLib.version,
                               name: m.data.name,
                               type: "variables",
                             };
@@ -326,7 +326,7 @@ export default function DocsPage() {
                           link={(name) => {
                             return `/docs/${encodeURIComponent(
                               currentLib.name
-                            )}/${encodeURIComponent(currentLib.packageVersion)}/variables/${name}`;
+                            )}/${encodeURIComponent(currentLib.version)}/variables/${name}`;
                           }}
                           icon={<VscSymbolVariable className="h-5 w-5" />}
                         />
@@ -337,7 +337,7 @@ export default function DocsPage() {
                           data={currentLib.types.map((m) => {
                             return {
                               lib: currentLib.name,
-                              packageVersion: currentLib.packageVersion,
+                              version: currentLib.version,
                               name: m.data.name,
                               type: "type",
                             };
@@ -345,7 +345,7 @@ export default function DocsPage() {
                           link={(name) => {
                             return `/docs/${encodeURIComponent(
                               currentLib.name
-                            )}/${encodeURIComponent(currentLib.packageVersion)}/type/${name}`;
+                            )}/${encodeURIComponent(currentLib.version)}/type/${name}`;
                           }}
                           icon={<VscSymbolInterface className="h-5 w-5" />}
                         />

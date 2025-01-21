@@ -27,40 +27,40 @@ export function Type({ types, prefix }: { types: string[]; prefix?: string }) {
     const entries: DocLink[] = [];
 
     //@ts-ignore
-    let lib: Documentation = DocumentationStore.libraries.find((module) => module.name === router.query.package as string && module.packageVersion === router.query.version as string)
+    let lib: Documentation = DocumentationStore.libraries.find((module) => module.name === router.query.package as string && module.version === router.query.version as string)
 
     lib.classes.forEach((c) =>
         entries.push({
           module: lib.name,
-          href: `/docs/${encodeURIComponent(lib.name)}/${encodeURIComponent(lib.packageVersion)}/class/${c.data.name}`,
+          href: `/docs/${encodeURIComponent(lib.name)}/${encodeURIComponent(lib.version)}/class/${c.data.name}`,
           target: c.data.name,
           type: "class",
         }));
     lib.functions.forEach((c) =>
         entries.push({
           module: lib.name,
-          href: `/docs/${encodeURIComponent(lib.name)}/${encodeURIComponent(lib.packageVersion)}/function/${c.data.name}`,
+          href: `/docs/${encodeURIComponent(lib.name)}/${encodeURIComponent(lib.version)}/function/${c.data.name}`,
           target: c.data.name,
           type: "function",
         }));
     lib.types.forEach((c) =>
         entries.push({
           module: lib.name,
-          href: `/docs/${encodeURIComponent(lib.name)}/${encodeURIComponent(lib.packageVersion)}/type/${c.data.name}`,
+          href: `/docs/${encodeURIComponent(lib.name)}/${encodeURIComponent(lib.version)}/type/${c.data.name}`,
           target: c.data.name,
           type: "type",
         }));
     lib.variables.forEach((c) =>
         entries.push({
           module: lib.name,
-          href: `/docs/${encodeURIComponent(lib.name)}/${encodeURIComponent(lib.packageVersion)}/variable/${c.data.name}`,
+          href: `/docs/${encodeURIComponent(lib.name)}/${encodeURIComponent(lib.version)}/variable/${c.data.name}`,
           target: c.data.name,
           type: "variable",
         }));
     lib.enum.forEach((c) =>
         entries.push({
           module: lib.name,
-          href: `/docs/${encodeURIComponent(lib.name)}/${encodeURIComponent(lib.packageVersion)}/enum/${c.data.name}`,
+          href: `/docs/${encodeURIComponent(lib.name)}/${encodeURIComponent(lib.version)}/enum/${c.data.name}`,
           target: c.data.name,
           type: "enum",
         })
